@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elasticity", "Elasticity\Elasticity.csproj", "{947FF47C-04CF-42C8-836A-F7ED1A78788A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8EF658ED-307C-408D-A5A6-9C929C57597A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elasticity.Tests", "Tests\Elasticity.Tests\Elasticity.Tests.csproj", "{8991824C-164B-4D1B-B339-24DC695005B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCFECD9E-F0AE-455A-8E04-29E89F332C6A}"
+	ProjectSection(SolutionItems) = preProject
+		Elasticity.vsmdi = Elasticity.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Elasticity.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{947FF47C-04CF-42C8-836A-F7ED1A78788A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{947FF47C-04CF-42C8-836A-F7ED1A78788A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{947FF47C-04CF-42C8-836A-F7ED1A78788A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{947FF47C-04CF-42C8-836A-F7ED1A78788A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8991824C-164B-4D1B-B339-24DC695005B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8991824C-164B-4D1B-B339-24DC695005B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8991824C-164B-4D1B-B339-24DC695005B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8991824C-164B-4D1B-B339-24DC695005B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8991824C-164B-4D1B-B339-24DC695005B0} = {8EF658ED-307C-408D-A5A6-9C929C57597A}
+		{FCFECD9E-F0AE-455A-8E04-29E89F332C6A} = {8EF658ED-307C-408D-A5A6-9C929C57597A}
+	EndGlobalSection
+EndGlobal

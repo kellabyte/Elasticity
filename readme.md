@@ -1,6 +1,10 @@
 # What is Elasticity?
 Elasticity is an implementation of the [Scheduler-Agent-Supervisor](http://vasters.com/clemensv/CommentView,guid,83f937f7-b838-43d0-ad61-74605eceafa2.aspx) pattern as blogged by Clemens Vasters. The goals for Elasticity is to build a solid foundation for facilitating scalable and resilient services.
 
+The idea is you would run the Schedulers and Supervisor on any machine you wish and you would run as many instances of Agents as you require for handling various tasks. The scheduler accepts jobs (with many tasks) and distributes them to the Agents who know how to handle these tasks. There is more to it than that but that is a simple example.
+
+You would implement the parts that push jobs & tasks into the Scheduler and then implement your Agents to execute the tasks. This framework will help handle the infrastructure requires to scale while being resilient to faults.
+
 ## Status
 Elasticity is brand new and I am learning the pieces as I put it together. Currently this is very much a work in progress. This document will change as the project gets on it's feet and is functional. 
 
@@ -10,6 +14,9 @@ Right now the code base is in flux as I transition to a DDD/CQRS architecture. F
 * \Commands
 * \Domain
 * \Events
+
+## Unit Tests
+Please read Tests\Elasticity.Tests\DomainTests.cs for tests against the domain. It's early. Give me some time :)
 
 ## Ideas in the bucket (not guaranteed)
 Some of the ideas I have for Elasticity is as follows:

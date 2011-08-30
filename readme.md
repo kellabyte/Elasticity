@@ -26,4 +26,4 @@ Some of the ideas I have for Elasticity is as follows:
 * Elasticity will be designed with Event Sourcing at the base so every service built gets Event Sourcing for free. The current plan is to implement DDD/CQRS.
 * Replaying of events from the event data store.
 * Schedulers, Supervisors and Agents will use Cassandra for auto-discovery making the Scheduler capable of dynamically detecting Agents.
-* Schedulers, Supervisors and Agents will Cassandra for no single point of failure and to distribute the event store.
+* Schedulers, Supervisors and Agents will use Cassandra for no single point of failure and to distribute the event store.

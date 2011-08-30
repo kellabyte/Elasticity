@@ -5,41 +5,23 @@ using System.Text;
 
 namespace Elasticity.Events
 {
-    public class EventStore : IEventStore
+    public abstract class EventStore : IEventStore
     {
-        //private readonly IEventPublisher publisher;
         private readonly IEventAggregator publisher;
-
-        private struct EventDescriptor
-        {
-            public readonly Event EventData;
-            public readonly Guid Id;
-            public readonly int Version;
-
-            public EventDescriptor(Guid id, Event eventData, int version)
-            {
-                EventData = eventData;
-                Version = version;
-                Id = id;
-            }
-        }
-
+        
         public EventStore(IEventAggregator publisher)
         {
             this.publisher = publisher;
         }
 
-        private readonly Dictionary<Guid, List<EventDescriptor>> current = new Dictionary<Guid, List<EventDescriptor>>();
-
         public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
         {
-            List<EventDescriptor> eventDescriptors;
-            if (!current.TryGetValue(aggregateId, out eventDescriptors))
+            int aggregateVersion = GetVersionForAggregate(aggregateId);
+            if (aggregateVersion == 0)
             {
-                eventDescriptors = new List<EventDescriptor>();
-                current.Add(aggregateId, eventDescriptors);
+
             }
-            else if (eventDescriptors[eventDescriptors.Count - 1].Version != expectedVersion && expectedVersion != -1)
+            else if (aggregateVersion != expectedVersion && expectedVersion != -1)
             {
                 throw new ConcurrencyException();
             }
@@ -49,20 +31,13 @@ namespace Elasticity.Events
             {
                 i++;
                 evt.Version = i;
-                eventDescriptors.Add(new EventDescriptor(aggregateId, evt, i));
-
-                publisher.Publish<Event>(evt);
+                SaveEvent(aggregateId, evt, i);
+                publisher.Publish(evt);
             }
         }
 
-        public List<Event> GetEventsForAggregate(Guid aggregateId)
-        {
-            List<EventDescriptor> eventDescriptors;
-            if (!current.TryGetValue(aggregateId, out eventDescriptors))
-            {
-                throw new AggregateNotFoundException();
-            }
-            return eventDescriptors.Select(desc => desc.EventData).ToList();
-        }
+        public abstract List<Event> GetEventsForAggregate(Guid aggregateId);
+        protected abstract int GetVersionForAggregate(Guid aggregateId);
+        protected abstract void SaveEvent(Guid aggregateId, Event evt, int version);
     }
 }

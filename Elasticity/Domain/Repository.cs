@@ -7,7 +7,7 @@ using Elasticity.Events;
 
 namespace Elasticity.Domain
 {
-    public class Repository<T> : IRepository<T> where T : AggregateRoot, new() //shortcut you can do as you see fit with new()
+    public class Repository<T> : IRepository<T> where T : AggregateRoot, new()
     {
         private readonly IEventStore storage;
 
@@ -16,14 +16,14 @@ namespace Elasticity.Domain
             this.storage = storage;
         }
 
-        public void Save(AggregateRoot aggregate, int expectedVersion)
+        public void Save(AggregateRoot aggregate)
         {
-            storage.SaveEvents(aggregate.Id, aggregate.GetUncommittedChanges(), expectedVersion);
+            storage.SaveEvents(aggregate.Id, aggregate.GetUncommittedChanges(), aggregate.Version);
         }
 
         public T GetById(Guid id)
         {
-            var obj = new T(); //lots of ways to do this
+            var obj = new T();
             var e = storage.GetEventsForAggregate(id);
             obj.LoadsFromHistory(e);
             return obj;

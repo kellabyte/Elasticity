@@ -5,8 +5,7 @@ using System.Text;
 
 namespace Elasticity
 {
-    public interface IContent
+    public interface IMessage
     {
-        object Content { get; }
     }
 }

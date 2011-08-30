@@ -28,19 +28,29 @@ namespace Elasticity.Domain
         public SchedulerTaskState DesiredState { get; private set; }
         public DateTimeOffset LockedUntil { get; private set; }
 
-        private void Handle(TaskCurrentStateUpdated evt)
+        public void ActivateCurrent()
         {
-            this.CurrentState = evt.State;
+            this.CurrentState = SchedulerTaskState.Active;
         }
 
-        private void Handle(TaskDesiredStateUpdated evt)
+        public void DisableCurrent()
         {
-            this.DesiredState = evt.State;
+            this.CurrentState = SchedulerTaskState.Disabled;
         }
 
-        private void Handle(TaskLockedUntilUpdated evt)
+        public void ActivateDesired()
         {
-            this.LockedUntil = evt.LockedUntil;
+            this.DesiredState = SchedulerTaskState.Active;
+        }
+
+        public void DisableDesired()
+        {
+            this.DesiredState = SchedulerTaskState.Disabled;
+        }
+
+        public void UpdateLockedUntil(DateTimeOffset dateTime)
+        {
+            this.LockedUntil = dateTime;
         }
     }
 

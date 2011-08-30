@@ -5,10 +5,13 @@ using System.Text;
 
 namespace Elasticity.Commands
 {
-    public class Command
+    public class DisableJob
     {
-        public Command()
+        public DisableJob(Guid jobId)
         {
+            this.JobId = jobId;
         }
+
+        public Guid JobId { get; set; }
     }
 }

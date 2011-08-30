@@ -7,14 +7,9 @@ using Elasticity.Domain;
 
 namespace Elasticity.Commands
 {
-    public class CreateJob : Command
+    public class EnqueueJob : Command
     {
-        public CreateJob(Guid jobId)
-            : this (jobId, null)
-        {
-        }
-
-        public CreateJob(Guid jobId, List<ISchedulerTask> tasks)
+        public EnqueueJob(Guid jobId, List<ISchedulerTask> tasks)
         {
             this.JobId = jobId;
             this.Tasks = tasks;

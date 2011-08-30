@@ -13,11 +13,5 @@ namespace Elasticity.Domain
         SchedulerTaskState CurrentState { get; }
         SchedulerTaskState DesiredState { get; }
         DateTimeOffset LockedUntil { get; }
-
-        //void UpdateCurrentState(SchedulerTaskState state);
-        //void UpdateDesiredState(SchedulerTaskState state);
-        //void UpdateLockedUntil(DateTimeOffset dateTime);
-
-        void Apply(Event evt);
     }
 }

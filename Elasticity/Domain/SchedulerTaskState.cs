@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Elasticity.Tests
+namespace Elasticity.Domain
 {
-    public class FakeAgent : Agent
+    public enum SchedulerTaskState
     {
+        Disabled,
+        Active,
     }
 }

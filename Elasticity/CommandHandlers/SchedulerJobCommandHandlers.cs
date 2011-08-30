@@ -1,79 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Elasticity.Commands;
+﻿using Elasticity.Commands;
 using Elasticity.Domain;
 using Elasticity.Events;
 
 namespace Elasticity.CommandHandlers
 {
     public class SchedulerJobCommandHandlers : 
-        IHandle<CreateJob>,
-        IHandle<AddTaskToJob>
+        IHandle<EnqueueJob>,
+        IHandle<DisableJob>,
+        IHandle<ActivateJob>
     {
+        private IRepository<SchedulerJob> repository = null;
+
         public SchedulerJobCommandHandlers(IRepository<SchedulerJob> repository)
         {
-            this.Repository = repository;
+            this.repository = repository;
         }
 
-        public IRepository<SchedulerJob> Repository { get; protected set; }
-
-        public void Handle(CreateJob message)
+        public void Handle(EnqueueJob command)
         {
-            SchedulerJob job = new SchedulerJob(message.JobId, message.Tasks);
-            Repository.Save(job, message.OriginalVersion);
+            SchedulerJob job = new SchedulerJob(command.JobId, command.Tasks);
+            repository.Save(job);
         }
 
-        public void Handle(AddTaskToJob command)
+        public void Handle(DisableJob command)
         {
-            SchedulerJob job = Repository.GetById(command.JobId);
-            if (job != null)
-            {
-                job.AddTaskToJob(command.TaskId, command.CurrentState, command.DesiredState, command.LockedUntil);
-                Repository.Save(job, command.OriginalVersion);
-            }
+            SchedulerJob job = repository.GetById(command.JobId);
+            job.Disable();
+            repository.Save(job);
         }
 
-        public void Handle(UpdateTaskCurrentState command)
+        public void Handle(ActivateJob command)
         {
-            SchedulerJob job = Repository.GetById(command.JobId);
-            if (job != null)
-            {
-                job.UpdateTaskCurrentState(command.TaskId, command.CurrentState);
-                Repository.Save(job, command.OriginalVersion);
-            }
-        }
-
-        public void Handle(UpdateTaskDesiredState command)
-        {
-            SchedulerJob job = Repository.GetById(command.JobId);
-            if (job != null)
-            {
-                job.UpdateDesiredState(command.TaskId, command.DesiredState);
-                Repository.Save(job, command.OriginalVersion);
-            }
-        }
-
-        public void Handle(UpdateTaskLockedUntil command)
-        {
-            SchedulerJob job = Repository.GetById(command.JobId);
-            if (job != null)
-            {
-                job.UpdateLockedUntil(command.TaskId, command.LockedUntil);
-                Repository.Save(job, command.OriginalVersion);
-            }
-        }
-
-        public void Handle(UpdateTaskContent command)
-        {
-            SchedulerJob job = Repository.GetById(command.JobId);
-            if (job != null)
-            {
-                job.UpdateTaskContent(command.TaskId, command.Content);
-                Repository.Save(job, command.OriginalVersion);
-            }
+            SchedulerJob job = repository.GetById(command.JobId);
+            job.Activate();
+            repository.Save(job);
         }
     }
 }

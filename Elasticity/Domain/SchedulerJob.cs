@@ -9,12 +9,10 @@ namespace Elasticity.Domain
 {
     public class SchedulerJob : AggregateRoot
     {
-        public List<ISchedulerTask> Tasks { get; private set; }
-
         public SchedulerJob()
-	    {
+        {
             // Used to create from the repository.
-	    }
+        }
 
         public SchedulerJob(Guid id, List<ISchedulerTask> tasks)
         {
@@ -25,77 +23,33 @@ namespace Elasticity.Domain
             base.Apply(new JobCreated(id, tasks));
         }
 
+        public SchedulerJobState CurrentState { get; private set; }
+        public List<ISchedulerTask> Tasks { get; private set; }
+
         private void Handle(JobCreated evt)
         {
             this.Id = evt.JobId;
             this.Tasks = evt.Tasks;
         }
 
-        public void AddTaskToJob(Guid taskId, SchedulerTaskState currentState,
-            SchedulerTaskState desiredState, DateTimeOffset lockedUntil)
+        public void Disable()
         {
-            base.Apply(new TaskAddedToJob(this.Id, taskId, currentState, desiredState, lockedUntil));
+            base.Apply(new JobDisabled(this.Id));
         }
 
-        public void Handle(TaskAddedToJob evt)
+        private void Handle(JobDisabled evt)
         {
-            this.Tasks.Add(new SchedulerTask(evt.TaskId, evt.CurrentState, evt.DesiredState, evt.LockedUntil));
+            this.CurrentState = SchedulerJobState.Disabled;
         }
 
-        public void UpdateTaskCurrentState(Guid id, SchedulerTaskState state)
+        public void Activate()
         {
-            base.Apply(new TaskCurrentStateUpdated(id, state));
+            base.Apply(new JobActivated(this.Id));
         }
 
-        private void Handle(TaskCurrentStateUpdated evt)
+        private void Handle(JobActivated evt)
         {
-            ISchedulerTask task = Tasks.SingleOrDefault(t => t.Id == evt.TaskId);
-            if (task != null)
-            {
-                task.Apply(evt);
-            }
-        }
-
-        public void UpdateDesiredState(Guid id, SchedulerTaskState state)
-        {
-            base.Apply(new TaskDesiredStateUpdated(id, state));
-        }
-
-        private void Handle(TaskDesiredStateUpdated evt)
-        {
-            ISchedulerTask task = Tasks.SingleOrDefault(t => t.Id == evt.TaskId);
-            if (task != null)
-            {
-                task.Apply(evt);
-            }
-        }
-
-        public void UpdateLockedUntil(Guid id, DateTimeOffset dateTime)
-        {
-            base.Apply(new TaskLockedUntilUpdated(id, dateTime));
-        }
-
-        private void Handle(TaskLockedUntilUpdated evt)
-        {
-            ISchedulerTask task = Tasks.SingleOrDefault(t => t.Id == evt.TaskId);
-            if (task != null)
-            {
-                task.Apply(evt);
-            }
-        }
-
-        public void UpdateTaskContent(Guid taskId, object content)
-        {
-            base.Apply(new TaskContentUpdated(taskId, content));
-        }
-
-        public void Handle(TaskContentUpdated evt)
-        {
-            ISchedulerTask task = Tasks.SingleOrDefault(t => t.Id == evt.TaskId);
-            if (task != null)
-            {
-                task.Apply(evt);
-            }
+            this.CurrentState = SchedulerJobState.Active;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Elasticity.Domain
 {
     public interface IRepository<T> where T : AggregateRoot, new()
     {
-        void Save(AggregateRoot aggregate, int expectedVersion);
+        void Save(AggregateRoot aggregate);
         T GetById(Guid id);
     }
 }

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Elasticity.Commands
+namespace Elasticity.Domain
 {
-    public class Command
+    public enum SchedulerJobState
     {
-        public Command()
-        {
-        }
+        Disabled,
+        Active,
     }
 }

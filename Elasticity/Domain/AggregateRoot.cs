@@ -40,11 +40,17 @@ namespace Elasticity.Domain
 
         private void Apply(Event evt, bool isNew)
         {
+            evt.Version = GetNewEventVersion();
             this.AsDynamic().Handle(evt);
             if (isNew)
             {
                 changes.Add(evt);
             }
+        }
+
+        private int GetNewEventVersion()
+        {
+            return ++Version;
         }
     }
 }
